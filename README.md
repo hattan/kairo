@@ -7,6 +7,7 @@ a slackbot framework
 from kairo import Kairo
 
 app = Kairo(__name__)
+app.start_bot()
 
 @command("/bot/hello/<name>")
 def hello(name):
