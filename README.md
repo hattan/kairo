@@ -1,3 +1,5 @@
+### Note this is still a work in progress and still not functional. 
+
 # kairo
 a slackbot framework
 
