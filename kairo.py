@@ -9,6 +9,8 @@ class Kairo:
     name = None
     slack_token = None
     slack_token_name = 'KARIO_SLACK_TOKEN'
+    slack_client = None
+    users = None
 
     def __init__(self,name):
         self.name = name
@@ -22,4 +24,8 @@ class Kairo:
         slack_token = token if (token is not None) else self.slack_token
         if(slack_token is None):
             raise RuntimeError('missing slack token')
+
+        self.slack_client = SlackClient(slack_token)
+        self.users = self.slack_client.api_call("users.list")
+
         return True
