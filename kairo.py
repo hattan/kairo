@@ -24,6 +24,12 @@ class Kairo:
         users = self.users
         return [user["profile"]["display_name"] for user in users.get("members",{}) if user["id"] == id][0]
 
+    def get_sleep_time(self):
+        return 1 #second delay between reading from firehose
+
+    def running(self):
+        return True
+
     def start_bot(self,token=None):
         slack_token = token if (token is not None) else self.slack_token
         if(slack_token is None):
@@ -32,4 +38,14 @@ class Kairo:
         self.slack_client = SlackClient(slack_token)
         self.users = self.slack_client.api_call("users.list")
         bot_id = self.slack_client.api_call("auth.test")["user_id"]
+        bot_name = self.get_user_name_by_id(bot_id)
+        READ_WEBSOCKET_DELAY = self.get_sleep_time()
+
+        if self.slack_client.rtm_connect():
+            print(bot_name + " connected and running!")
+            while self.running():
+                print(self.slack_client.rtm_read())
+                time.sleep(READ_WEBSOCKET_DELAY)            
+        else:
+            print("Connection failed. Invalid Slack token or bot ID?")
         return True
