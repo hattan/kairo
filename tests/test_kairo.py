@@ -42,7 +42,6 @@ def test_start_bot_throws_error_if_slack_token_not_in_environment_var(fake_env_g
 count = 0
 def fake_runner():
     global count 
-    print(count)
     count = count + 1
     return count < 2
 
@@ -188,7 +187,8 @@ def test_start_bot_success_prints_connected_message(fake_env_get,fake_api_call,f
     k.start_bot()
     #assert
     out, err = capsys.readouterr()
-    assert out == ("fake_bot connected and running!\n")  
+    print(out)
+    assert  "fake_bot connected and running!\n" == out
 
 @patch('slackclient.SlackClient.api_call')
 def test_get_sleep_time_returns_one(fake_api_call):

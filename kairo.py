@@ -44,7 +44,7 @@ class Kairo:
         if self.slack_client.rtm_connect():
             print(bot_name + " connected and running!")
             while self.running():
-                print(self.slack_client.rtm_read())
+                self.slack_client.rtm_read()
                 time.sleep(READ_WEBSOCKET_DELAY)            
         else:
             print("Connection failed. Invalid Slack token or bot ID?")
