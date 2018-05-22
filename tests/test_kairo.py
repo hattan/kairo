@@ -11,7 +11,6 @@ def test_Kairo_takes_name():
     k = Kairo("app")
     assert True
 
-
 @patch('kairo.Kairo.get_sleep_time')  
 @patch('slackclient.SlackClient.api_call')
 @patch('os.environ.get')
@@ -43,12 +42,6 @@ def test_start_bot_throws_error_if_slack_token_not_in_environment_var(fake_env_g
         k.start_bot()
 
     assert 'missing slack token' in str(excinfo.value)
-
-count = 0
-def fake_runner():
-    global count 
-    count = count + 1
-    return count < 2
 
 @patch('kairo.Kairo.get_sleep_time')  
 @patch('kairo.Kairo.running')    
@@ -155,12 +148,6 @@ def test_get_user_name_by_id_returns_username(fake_api_call,fake_rtm_connect,fak
     #assert
     assert name == "fake_bot"   
 
-def api_call_side_effect(input):
-    if input == "users.list":
-        return {"members" : [{"id" : "1234", "profile" : {"display_name" : "fake_bot"}}]}
-    else:
-        return {"user_id" : "1234"} 
-
 @patch('kairo.Kairo.get_sleep_time')  
 @patch('kairo.Kairo.running')    
 @patch('slackclient.SlackClient.rtm_read')
@@ -221,6 +208,19 @@ def test_running_returns_true():
     running = k.running()
     #assert
     assert running == 1 
+
+#side effects
+def api_call_side_effect(input):
+    if input == "users.list":
+        return {"members" : [{"id" : "1234", "profile" : {"display_name" : "fake_bot"}}]}
+    else:
+        return {"user_id" : "1234"} 
+
+count = 0
+def fake_runner():
+    global count 
+    count = count + 1
+    return count < 2    
      
  
 
