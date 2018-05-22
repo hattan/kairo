@@ -3,7 +3,9 @@ import glob
 import importlib
 import inspect
 import time
+from command import Command
 from slackclient import SlackClient
+from functools import wraps
 
 class Kairo:
     name = None
@@ -58,3 +60,18 @@ class Kairo:
         else:
             print("Connection failed. Invalid Slack token or bot ID?")
         return True
+
+    commands = {}
+    def parse_command(self,input,function):
+        data = input.split(' ')
+        self.commands[data[0]] = function
+
+    def command(self,input):
+        def _command(function):
+            self.parse_command(input,function)
+            @wraps(function)
+            def wrapper(*args):
+                rv = function(*args)
+                return rv
+            return wrapper 
+        return _command       

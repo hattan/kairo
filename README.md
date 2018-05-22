@@ -11,7 +11,7 @@ from kairo import Kairo
 app = Kairo(__name__)
 app.start_bot()
 
-@command("/bot/hello/<name>")
+@app.command("hello <name>")
 def hello(name):
     return "Hello {name}".format(name=name) 
 ```
