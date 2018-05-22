@@ -11,13 +11,16 @@ def test_Kairo_takes_name():
     k = Kairo("app")
     assert True
 
+
+@patch('kairo.Kairo.get_sleep_time')  
 @patch('slackclient.SlackClient.api_call')
 @patch('os.environ.get')
-def test_Kairo_has_start_bot_method(fake_env_get,fake_api_call):
+def test_Kairo_has_start_bot_method(fake_env_get,fake_api_call,fake_get_sleep_time):
     #arrange
     fake_api_call.side_effect = api_call_side_effect 
     fake_env_get.return_value = "1234"  
-    
+    fake_get_sleep_time.return_value = 0
+
     #act
     k = Kairo("app")
     k.start_bot()
@@ -25,13 +28,15 @@ def test_Kairo_has_start_bot_method(fake_env_get,fake_api_call):
     #assert
     assert True
 
+@patch('kairo.Kairo.get_sleep_time')  
 @patch('slackclient.SlackClient.rtm_connect')
 @patch('slackclient.SlackClient.api_call')
 @patch('os.environ.get')
-def test_start_bot_throws_error_if_slack_token_not_in_environment_var(fake_env_get,fake_api_call,fake_rtm_connect):
+def test_start_bot_throws_error_if_slack_token_not_in_environment_var(fake_env_get,fake_api_call,fake_rtm_connect,fake_get_sleep_time):
     fake_api_call.side_effect = api_call_side_effect
     fake_env_get.return_value = None
     fake_rtm_connect.return_value = True
+    fake_get_sleep_time.return_value = 0
 
     with pytest.raises(RuntimeError) as excinfo:
         k = Kairo("app")
@@ -45,12 +50,13 @@ def fake_runner():
     count = count + 1
     return count < 2
 
+@patch('kairo.Kairo.get_sleep_time')  
 @patch('kairo.Kairo.running')    
 @patch('slackclient.SlackClient.rtm_read')
 @patch('slackclient.SlackClient.rtm_connect')
 @patch('slackclient.SlackClient.api_call')
 @patch('os.environ.get')
-def test_Kairo_allows_to_specific_env_var_name(fake_env_get,fake_api_call,fake_rtm_connect,fake_rtm_read,fake_running):
+def test_Kairo_allows_to_specific_env_var_name(fake_env_get,fake_api_call,fake_rtm_connect,fake_rtm_read,fake_running,fake_get_sleep_time):
     #arrange
     global count 
     count = 0
@@ -59,7 +65,8 @@ def test_Kairo_allows_to_specific_env_var_name(fake_env_get,fake_api_call,fake_r
     fake_api_call.side_effect = api_call_side_effect
     fake_rtm_read.return_value = [{'text' : 'test 123' , 'channel' : 'foo', 'user' : 'bar'}]    
     fake_rtm_connect.return_value = True
-    
+    fake_get_sleep_time.return_value = 0
+
     #act
     k = Kairo("app")
     k.load_token_from_env(name = fake_token_name)
@@ -68,16 +75,18 @@ def test_Kairo_allows_to_specific_env_var_name(fake_env_get,fake_api_call,fake_r
     #assert
     fake_env_get.assert_called_with(fake_token_name)    
 
+@patch('kairo.Kairo.get_sleep_time')  
 @patch('kairo.Kairo.running')    
 @patch('slackclient.SlackClient.rtm_read')
 @patch('slackclient.SlackClient.rtm_connect')
 @patch('slackclient.SlackClient.api_call')
-def test_start_bot_takes_in_optional_slack_token(fake_api_call,fake_rtm_connect,fake_rtm_read,fake_running):
+def test_start_bot_takes_in_optional_slack_token(fake_api_call,fake_rtm_connect,fake_rtm_read,fake_running,fake_get_sleep_time):
     #arrange
     global count 
     count = 0
     fake_running.side_effect=fake_runner
     fake_rtm_read.return_value = [{'text' : 'test 123' , 'channel' : 'foo', 'user' : 'bar'}]     
+    fake_get_sleep_time.return_value = 0
 
     slack_token = "fake_slack_token"
     fake_api_call.side_effect = api_call_side_effect
@@ -103,15 +112,17 @@ def test_Kairo_has_slack_client_member():
     #assert
     assert k.slack_client is None    
 
+@patch('kairo.Kairo.get_sleep_time')  
 @patch('kairo.Kairo.running')    
 @patch('slackclient.SlackClient.rtm_read')
 @patch('slackclient.SlackClient.rtm_connect')
 @patch('slackclient.SlackClient.api_call')
-def test_start_bot_populates_user_list(fake_api_call,fake_rtm_connect,fake_rtm_read,fake_running):
+def test_start_bot_populates_user_list(fake_api_call,fake_rtm_connect,fake_rtm_read,fake_running,fake_get_sleep_time):
     #arrange
     global count 
     count = 0
     fake_running.side_effect=fake_runner
+    fake_get_sleep_time.return_value = 0    
     fake_rtm_read.return_value = [{'text' : 'test 123' , 'channel' : 'foo', 'user' : 'bar'}]         
     k = Kairo("app")
     fake_api_call.side_effect = api_call_side_effect
@@ -123,14 +134,16 @@ def test_start_bot_populates_user_list(fake_api_call,fake_rtm_connect,fake_rtm_r
     assert k.users is not None
     assert len(k.users) > 0 
 
+@patch('kairo.Kairo.get_sleep_time')  
 @patch('kairo.Kairo.running')    
 @patch('slackclient.SlackClient.rtm_read')
 @patch('slackclient.SlackClient.rtm_connect')
 @patch('slackclient.SlackClient.api_call')
-def test_get_user_name_by_id_returns_username(fake_api_call,fake_rtm_connect,fake_rtm_read,fake_running):
+def test_get_user_name_by_id_returns_username(fake_api_call,fake_rtm_connect,fake_rtm_read,fake_running,fake_get_sleep_time):
     #arrange
     k = Kairo("app")
     fake_api_call.side_effect = api_call_side_effect
+    fake_get_sleep_time.return_value = 0        
     global count 
     count = 0
     fake_running.side_effect=fake_runner
@@ -148,16 +161,18 @@ def api_call_side_effect(input):
     else:
         return {"user_id" : "1234"} 
 
+@patch('kairo.Kairo.get_sleep_time')  
 @patch('kairo.Kairo.running')    
 @patch('slackclient.SlackClient.rtm_read')
 @patch('slackclient.SlackClient.rtm_connect')
 @patch('slackclient.SlackClient.api_call')
 @patch('os.environ.get')
-def test_start_bot_prints_message_if_slack_client_cant_connect(fake_env_get,fake_api_call,fake_rtm_connect,fake_rtm_read,fake_running,capsys):
+def test_start_bot_prints_message_if_slack_client_cant_connect(fake_env_get,fake_api_call,fake_rtm_connect,fake_rtm_read,fake_running,fake_get_sleep_time,capsys):
     #arrange
     global count 
     count = 0
     fake_running.side_effect=fake_runner
+    fake_get_sleep_time.return_value = 0       
     fake_rtm_read.return_value = [{'text' : 'test 123' , 'channel' : 'foo', 'user' : 'bar'}]         
     k = Kairo("app")
     fake_rtm_connect.return_value = False
@@ -168,17 +183,18 @@ def test_start_bot_prints_message_if_slack_client_cant_connect(fake_env_get,fake
     out, err = capsys.readouterr()
     assert out == "Connection failed. Invalid Slack token or bot ID?\n"
 
-
+@patch('kairo.Kairo.get_sleep_time')  
 @patch('kairo.Kairo.running')    
 @patch('slackclient.SlackClient.rtm_read')
 @patch('slackclient.SlackClient.rtm_connect')
 @patch('slackclient.SlackClient.api_call')
 @patch('os.environ.get')
-def test_start_bot_success_prints_connected_message(fake_env_get,fake_api_call,fake_rtm_connect,fake_rtm_read,fake_running,capsys):
+def test_start_bot_success_prints_connected_message(fake_env_get,fake_api_call,fake_rtm_connect,fake_rtm_read,fake_running,fake_get_sleep_time,capsys):
     #arrange
     global count 
     count = 0
     fake_running.side_effect=fake_runner
+    fake_get_sleep_time.return_value = 0        
     fake_rtm_read.return_value = [{'text' : 'test 123' , 'channel' : 'foo', 'user' : 'bar'}]        
     k = Kairo("app")
     fake_rtm_connect.return_value = True
