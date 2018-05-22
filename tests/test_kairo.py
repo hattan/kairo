@@ -190,7 +190,6 @@ def test_start_bot_success_prints_connected_message(fake_env_get,fake_api_call,f
     k.start_bot()
     #assert
     out, err = capsys.readouterr()
-    print(out)
     assert  "fake_bot connected and running!\n" == out
 
 @patch('slackclient.SlackClient.api_call')
@@ -201,13 +200,63 @@ def test_get_sleep_time_returns_one(fake_api_call):
     #assert
     assert sleep_time == 1 
 
-
 def test_running_returns_true():
     #arrange
     k = Kairo("app")
     running = k.running()
     #assert
     assert running == 1 
+
+@patch('kairo.Kairo.parse_slack_message')
+@patch('kairo.Kairo.get_sleep_time')  
+@patch('kairo.Kairo.running')    
+@patch('slackclient.SlackClient.rtm_read')
+@patch('slackclient.SlackClient.rtm_connect')
+@patch('slackclient.SlackClient.api_call')
+@patch('os.environ.get')
+def test_start_bot_read_passed_to_parse_slack_message(fake_env_get,fake_api_call,fake_rtm_connect,fake_rtm_read,fake_running,fake_get_sleep_time,fake_parse_slack_message,capsys):
+    #arrange
+    global count 
+    count = 0
+    fake_running.side_effect=fake_runner
+    fake_get_sleep_time.return_value = 0        
+    fake_message = [{'text' : 'test 123' , 'channel' : 'foo', 'user' : 'bar'}]
+    fake_rtm_read.return_value = fake_message        
+    k = Kairo("app")
+    fake_rtm_connect.return_value = True
+    fake_parse_slack_message.return_value = None,None,None
+    fake_api_call.side_effect = api_call_side_effect
+    #act
+    k.start_bot()
+    #assert
+    fake_parse_slack_message.assert_called_with(fake_message)
+
+def test_parse_slack_message_returns_text_from_message():
+    #arrange
+    fake_message = [{'text' : 'test 123' , 'channel' : 'foo', 'user' : 'bar'}]
+    k = Kairo("app")
+    #act
+    message,channel,user = k.parse_slack_message(fake_message)
+    #assert
+    assert 'test 123' == message
+
+def test_parse_slack_message_returns_channel_from_message():
+    #arrange
+    fake_message = [{'text' : 'test 123' , 'channel' : 'foo', 'user' : 'bar'}]
+    k = Kairo("app")
+    #act
+    message,channel,user = k.parse_slack_message(fake_message)
+    #assert
+    assert 'foo' == channel
+
+def test_parse_slack_message_returns_user_from_message():
+    #arrange
+    fake_message = [{'text' : 'test 123' , 'channel' : 'foo', 'user' : 'bar'}]
+    k = Kairo("app")
+    #act
+    message,channel,user = k.parse_slack_message(fake_message)
+    #assert
+    assert 'bar' == user    
 
 #side effects
 def api_call_side_effect(input):

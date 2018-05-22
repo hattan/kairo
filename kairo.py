@@ -30,6 +30,15 @@ class Kairo:
     def running(self):
         return True
 
+    def parse_slack_message(self,slack_incoming_message):
+        output_list = slack_incoming_message
+        if output_list and len(output_list) > 0:
+            for output in output_list:
+                if output and 'text' in output:
+                    return output['text'].strip(), output['channel'], output['user']
+
+        return None, None, None
+
     def start_bot(self,token=None):
         slack_token = token if (token is not None) else self.slack_token
         if(slack_token is None):
@@ -44,7 +53,7 @@ class Kairo:
         if self.slack_client.rtm_connect():
             print(bot_name + " connected and running!")
             while self.running():
-                self.slack_client.rtm_read()
+                command, channel, user = self.parse_slack_message(self.slack_client.rtm_read())
                 time.sleep(READ_WEBSOCKET_DELAY)            
         else:
             print("Connection failed. Invalid Slack token or bot ID?")
