@@ -1,5 +1,5 @@
 ### Note this is still a work in progress and still not functional. 
-g
+
 # kairo
 a slackbot framework
 
