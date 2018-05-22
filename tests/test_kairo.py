@@ -288,6 +288,38 @@ def test_command_decorator_is_parsed(fake_env_get,fake_api_call,fake_rtm_connect
     #assert
     assert "hello" in k.commands
 
+@patch('kairo.Kairo.send_response')
+@patch('kairo.Kairo.parse_slack_message')
+@patch('kairo.Kairo.get_sleep_time')  
+@patch('kairo.Kairo.running')    
+@patch('slackclient.SlackClient.rtm_read')
+@patch('slackclient.SlackClient.rtm_connect')
+@patch('slackclient.SlackClient.api_call')
+@patch('os.environ.get')
+def test_command_decorator_invokes_function(fake_env_get,fake_api_call,fake_rtm_connect,fake_rtm_read,fake_running,fake_get_sleep_time,fake_parse_slack_message,fake_send_response):
+    #arrange
+    global count 
+    count = 0
+    fake_running.side_effect=fake_runner
+    fake_get_sleep_time.return_value = 0        
+    fake_message = [{'text' : 'hello' , 'channel' : 'foo', 'user' : 'bar'}]
+    fake_rtm_read.return_value = fake_message   
+    fake_rtm_connect.return_value = True
+    fake_parse_slack_message.return_value = None,None,None
+    fake_api_call.side_effect = api_call_side_effect
+
+    #act
+    k = Kairo("app")
+
+    @k.command("hello <name>")
+    def foo():
+        return "bar bar"
+
+    k.start_bot()
+
+    #assert
+    fake_send_response.assert_called_with('foo')
+
 #side effects
 def api_call_side_effect(input):
     if input == "users.list":
