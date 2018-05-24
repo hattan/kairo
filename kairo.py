@@ -47,8 +47,7 @@ class Kairo:
             command = parts[0].lower()
             if command in self.commands:
                 action = self.commands[command]
-
-                text,attachments = action(input,user)
+                text = action(input,user)
                 if text is not None:
                     self.send_response(text)
 
