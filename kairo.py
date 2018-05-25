@@ -57,9 +57,11 @@ class Kairo:
     def handle_command(self,input, channel, user):
         if not input is '':
             command,args = self.parse_input(input)
-            if command in self.commands:
-                action = self.commands[command]
-                text = action(args,user)
+            key = self.get_key(command,args)
+            if key in self.commands:
+                action = self.commands[key]
+                text = action(user,*args)
+
                 if text is not None:
                     self.send_response(text)
 
@@ -90,10 +92,14 @@ class Kairo:
     def send_response(self,text):
         self.slack_client.api_call("chat.postMessage", channel="foo",text=text, as_user=True)
 
+    def get_key(self,command,args):
+        return command + str(len(args))
+
     commands = {}
     def parse_command(self,input,function):
-        data = input.split(' ')
-        self.commands[data[0]] = function
+        command,args =self.parse_input(input)
+        key = self.get_key(command,args)
+        self.commands[key] = function
 
     def command(self,input):
         def _command(function):
