@@ -318,6 +318,36 @@ def test_command_decorator_invokes_function(fake_env_get,fake_api_call,fake_rtm_
     #assert
     fake_send_response.assert_called_with('bar bar')
 
+@patch('kairo.Kairo.send_response')
+@patch('kairo.Kairo.get_sleep_time')  
+@patch('kairo.Kairo.running')    
+@patch('slackclient.SlackClient.rtm_read')
+@patch('slackclient.SlackClient.rtm_connect')
+@patch('slackclient.SlackClient.api_call')
+@patch('os.environ.get')
+def test_command_decorator_invokes_function_with_parameter(fake_env_get,fake_api_call,fake_rtm_connect,fake_rtm_read,fake_running,fake_get_sleep_time,fake_send_response):
+    #arrange
+    global count 
+    count = 0
+    fake_running.side_effect=fake_runner
+    fake_get_sleep_time.return_value = 0        
+    fake_message = [{'text' : 'hello bob' , 'channel' : 'foo', 'user' : 'bar'}]
+    fake_rtm_read.return_value = fake_message   
+    fake_rtm_connect.return_value = True
+    fake_api_call.side_effect = api_call_side_effect
+
+    #act
+    k = Kairo("app")
+
+    @k.command("hello <name>")
+    def foo(args,user):
+        return (args[0] == "bob")
+            
+    k.start_bot()
+
+    #assert
+    fake_send_response.assert_called_with(True)
+
 #side effects
 def api_call_side_effect(input):
     if input == "users.list":

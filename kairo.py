@@ -41,13 +41,25 @@ class Kairo:
 
         return None, None, None
 
+    def parse_input(self,command):
+        parts = command.split(' ')
+        size = len(parts)
+        command = parts[0] if size > 0 else None
+        count = 1
+        args = []
+        while(count<size):
+            argument = parts[count].strip()
+            if not argument is '':
+                args.append(argument)
+            count = count + 1
+        return command,args
+
     def handle_command(self,input, channel, user):
         if not input is '':
-            parts = input.split(' ')
-            command = parts[0].lower()
+            command,args = self.parse_input(input)
             if command in self.commands:
                 action = self.commands[command]
-                text = action(input,user)
+                text = action(args,user)
                 if text is not None:
                     self.send_response(text)
 
