@@ -436,7 +436,7 @@ def test_command_routes_with_different_params_paramless_command_works(fake_env_g
 
     #act
     k = Kairo("app")
-
+    
     @k.command("hello <f_name> <l_name>")
     def foo(user,f_name,l_name):
         return f_name == "bob" and l_name == "smith"
@@ -446,10 +446,11 @@ def test_command_routes_with_different_params_paramless_command_works(fake_env_g
         return f_name == "mike" 
 
     @k.command("hello")
-    def bar(user):
+    def moo(user):
         return True 
-
+    
     k.start_bot()
+    
 
     #assert
     fake_send_response.assert_called_with(True)   
