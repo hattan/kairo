@@ -63,7 +63,7 @@ class Kairo:
                 text = action(user,*args)
 
                 if text is not None:
-                    self.send_response(text)
+                    self.send_response(text,channel)
 
     def start_bot(self,token=None):
         slack_token = token if (token is not None) else self.slack_token
@@ -89,8 +89,8 @@ class Kairo:
             print("Connection failed. Invalid Slack token or bot ID?")
         return True
 
-    def send_response(self,text):
-        self.slack_client.api_call("chat.postMessage", channel="foo",text=text, as_user=True)
+    def send_response(self,text,channel):
+        self.slack_client.api_call("chat.postMessage", channel=channel,text=text, as_user=True)
 
     def get_key(self,command,args):
         return command + str(len(args))

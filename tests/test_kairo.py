@@ -316,7 +316,7 @@ def test_command_decorator_invokes_function(fake_env_get,fake_api_call,fake_rtm_
     k.start_bot()
 
     #assert
-    fake_send_response.assert_called_with('bar bar')
+    fake_send_response.assert_called_with('bar bar','foo')
 
 @patch('kairo.Kairo.send_response')
 @patch('kairo.Kairo.get_sleep_time')  
@@ -346,7 +346,7 @@ def test_command_decorator_invokes_function_with_parameter(fake_env_get,fake_api
     k.start_bot()
 
     #assert
-    fake_send_response.assert_called_with(True)
+    fake_send_response.assert_called_with(True,"foo")
 
 @patch('kairo.Kairo.send_response')
 @patch('kairo.Kairo.get_sleep_time')  
@@ -376,7 +376,7 @@ def test_command_decorator_invokes_function_with_multiple_parameter(fake_env_get
     k.start_bot()
 
     #assert
-    fake_send_response.assert_called_with(True)    
+    fake_send_response.assert_called_with(True,"foo")    
 
 @patch('kairo.Kairo.send_response')
 @patch('kairo.Kairo.get_sleep_time')  
@@ -414,7 +414,7 @@ def test_command_routes_with_different_params_work(fake_env_get,fake_api_call,fa
     k.start_bot()
 
     #assert
-    fake_send_response.assert_called_with(True)   
+    fake_send_response.assert_called_with(True,"foo")   
 
 @patch('kairo.Kairo.send_response')
 @patch('kairo.Kairo.get_sleep_time')  
@@ -453,7 +453,7 @@ def test_command_routes_with_different_params_paramless_command_works(fake_env_g
     
 
     #assert
-    fake_send_response.assert_called_with(True)   
+    fake_send_response.assert_called_with(True,"foo")   
 
 #side effects
 def api_call_side_effect(input):
