@@ -9,11 +9,12 @@ a slackbot framework
 from kairo import Kairo
 
 app = Kairo(__name__)
-app.start_bot()
 
 @app.command("hello <name>")
 def hello(name):
     return "Hello {name}".format(name=name) 
+
+app.start_bot()    
 ```
 
  In slack invoke bot using
