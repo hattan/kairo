@@ -195,7 +195,7 @@ def test_command_routes_with_different_params_paramless_command_works(fake_env_g
     
 
     #assert
-    fake_send_response.assert_called_with(True,"foo")   
+    fake_send_response.assert_called_with(True,"foo")
 
  
 
