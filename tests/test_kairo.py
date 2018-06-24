@@ -11,6 +11,20 @@ def test_Kairo_takes_name():
     k = Kairo("app")
     assert True
 
+def test_parse_slack_message_with_none_passed_returns_none_tuple():
+    k = Kairo("app")
+    command, channel, user = k.parse_slack_message(None)
+    assert command is None
+    assert channel is None
+    assert user is None
+
+@patch('slackclient.SlackClient.api_call')
+def test_send_response_calls_slack_client_api_call(fake_api_call):
+    k = Kairo("app")
+    k.slack_client = SlackClient("fake_token") #slack_client is instantiated in start_bot, calling this even to avoid mocking everything else.
+    k.send_response("text1","channel2")
+    fake_api_call.assert_called_with("chat.postMessage",channel="channel2",text="text1",as_user=True)
+
 @patch('kairo.Kairo.get_sleep_time')  
 @patch('slackclient.SlackClient.api_call')
 @patch('os.environ.get')
