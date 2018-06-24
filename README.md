@@ -1,4 +1,4 @@
-# kairo
+# kairo [![Build Status](https://travis-ci.org/hattan/kairo.svg?branch=master)](https://travis-ci.org/hattan/kairo)
 a slackbot framework
 
 ### Installation
