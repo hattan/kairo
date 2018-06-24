@@ -25,7 +25,7 @@ class Kairo:
         return [user["profile"]["display_name"] for user in users.get("members", {}) if user["id"] == id][0]
 
     def get_sleep_time(self):
-        return 1  
+        return 1
 
     def running(self):
         return True
