@@ -135,7 +135,7 @@ def test_start_bot_populates_user_list(fake_api_call,fake_rtm_connect,fake_rtm_r
     fake_api_call.side_effect = api_call_side_effect
 
     #act
-    k.start_bot()
+    k.start_bot("fake_slack_token")
 
     #assert
     assert k.users is not None
@@ -157,7 +157,7 @@ def test_get_user_name_by_id_returns_username(fake_api_call,fake_rtm_connect,fak
     fake_rtm_read.return_value = [{'text' : 'test 123' , 'channel' : 'foo', 'user' : 'bar'}]     
 
     #act
-    k.start_bot()
+    k.start_bot("fake_token")
     name = k.get_user_name_by_id("1234")
     #assert
     assert name == "fake_bot"   
