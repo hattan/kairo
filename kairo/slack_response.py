@@ -2,10 +2,10 @@ class SlackResponse:
 
     @staticmethod
     def text(text):
-        return text,None
+        return text, None
 
     @staticmethod
-    def attachment(title=None,image_url=None,pretext=None,text=None,author_name=None,author_link=None):
+    def attachment(title=None, image_url=None, pretext=None, text=None, author_name=None, author_link=None):
         attachment = {}
 
         if title is not None:
@@ -26,4 +26,4 @@ class SlackResponse:
         if author_link is not None:
             attachment['author_link'] = author_link
 
-        return None,[attachment]
+        return None, [attachment]
