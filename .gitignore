@@ -8,6 +8,7 @@ __pycache__/
 
 .idea/
 .vscode/
+cov_annotate/
 
 # Distribution / packaging
 .Python
