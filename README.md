@@ -27,7 +27,7 @@ app.start_bot()
 ```
 
  In slack invoke bot using
- > bot hello foo
+ > hello foo
 
 #### Start bot
 ```python example.py```
