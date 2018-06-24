@@ -63,7 +63,7 @@ def hello(name):
 app.start_bot("slack_api_token_here")    
 ```
 
-#### Unit Tests
+### Unit Tests
 Run tests (from root of the project):
 
     pytest 
