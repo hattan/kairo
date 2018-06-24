@@ -1,7 +1,9 @@
+import sys
+sys.path.append("kairo")
+
 import pytest
 from mock import MagicMock,patch
 from slackclient import SlackClient
-
 from kairo import Kairo
 
 def test_Kairo_exists():
