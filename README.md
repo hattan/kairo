@@ -34,7 +34,7 @@ app.start_bot()
 
 
 ### Slack Token Configuration
-Kairo has multiple methods in which you can configure the slack api token. 
+Kairo has multiple methods in which you can configure the slack api token. Select one of the following methods (you don't have to do them all.) 
 
 * Create an environment variable called KAIRO_SLACK_TOKEN. Kairo will look for this token and use it if found.
 * Call the method load_token_from_env with the name of the environment varible you would like to use
