@@ -42,7 +42,7 @@ Kairo has multiple methods in which you can configure the slack api token.
 from kairo import Kairo
 
 app = Kairo(__name__)
-app.load_token_from_env("MY_SLACK_TOKEN_KEY")
+app.load_token_from_env("CUSTOM_ENVIRONMENT_VARIABLE")
 ```
 * Don't want to use environment variables? No problem! Pass a token to the start_bot method.
 ```python
