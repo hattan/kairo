@@ -8,7 +8,7 @@ You can also configure the Slack API token using other mechanisms. See (Slack To
 
 Install deps : 
 
-    pip install -r requirements.text 
+    pip install -r requirements.txt 
 
 #### Create a bot script (eg example.py)    
 The bot should be up and running.
