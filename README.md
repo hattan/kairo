@@ -62,3 +62,16 @@ def hello(name):
 
 app.start_bot("slack_api_token_here")    
 ```
+
+#### Unit Tests
+Run tests (from root of the project):
+
+    pytest 
+
+To run tests continuously via [pytest-watch](https://github.com/joeyespo/pytest-watch):
+
+    ptw
+
+#### Code Coverage
+
+    ./cover.sh
