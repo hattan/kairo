@@ -103,12 +103,5 @@ class Kairo:
     def command(self, text):
         def _command(command_function):
             self.parse_command(text, command_function)
-
-            @wraps(command_function)
-            def wrapper(*args):
-                rv = command_function(*args)
-                return rv
-
-            return wrapper
-
+            return command_function
         return _command
