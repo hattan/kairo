@@ -1,6 +1,7 @@
 import sys
 sys.path.append("kairo")
 
+from .mock_helpers import fake_runner, api_call_side_effect, reset_count
 from mock import patch
 from kairo import Kairo
 
@@ -14,8 +15,7 @@ from kairo import Kairo
 @patch('os.environ.get')
 def test_command_decorator_is_parsed(fake_env_get,fake_api_call,fake_rtm_connect,fake_rtm_read,fake_running,fake_get_sleep_time,fake_parse_slack_message,capsys):
     #arrange
-    global count 
-    count = 0
+    reset_count()
     fake_running.side_effect=fake_runner
     fake_get_sleep_time.return_value = 0        
     fake_message = [{'text' : 'test 123' , 'channel' : 'foo', 'user' : 'bar'}]
@@ -44,8 +44,7 @@ def test_command_decorator_is_parsed(fake_env_get,fake_api_call,fake_rtm_connect
 @patch('os.environ.get')
 def test_command_decorator_invokes_function(fake_env_get,fake_api_call,fake_rtm_connect,fake_rtm_read,fake_running,fake_get_sleep_time,fake_send_response):
     #arrange
-    global count 
-    count = 0
+    reset_count()
     fake_running.side_effect=fake_runner
     fake_get_sleep_time.return_value = 0        
     fake_message = [{'text' : 'hello bob' , 'channel' : 'foo', 'user' : 'bar'}]
@@ -74,8 +73,7 @@ def test_command_decorator_invokes_function(fake_env_get,fake_api_call,fake_rtm_
 @patch('os.environ.get')
 def test_command_decorator_invokes_function_with_parameter(fake_env_get,fake_api_call,fake_rtm_connect,fake_rtm_read,fake_running,fake_get_sleep_time,fake_send_response):
     #arrange
-    global count 
-    count = 0
+    reset_count()
     fake_running.side_effect=fake_runner
     fake_get_sleep_time.return_value = 0        
     fake_message = [{'text' : 'hello bob' , 'channel' : 'foo', 'user' : 'bar'}]
@@ -104,8 +102,7 @@ def test_command_decorator_invokes_function_with_parameter(fake_env_get,fake_api
 @patch('os.environ.get')
 def test_command_decorator_invokes_function_with_multiple_parameter(fake_env_get,fake_api_call,fake_rtm_connect,fake_rtm_read,fake_running,fake_get_sleep_time,fake_send_response):
     #arrange
-    global count 
-    count = 0
+    reset_count()
     fake_running.side_effect=fake_runner
     fake_get_sleep_time.return_value = 0        
     fake_message = [{'text' : 'hello bob smith' , 'channel' : 'foo', 'user' : 'bar'}]
@@ -134,8 +131,7 @@ def test_command_decorator_invokes_function_with_multiple_parameter(fake_env_get
 @patch('os.environ.get')
 def test_command_routes_with_different_params_work(fake_env_get,fake_api_call,fake_rtm_connect,fake_rtm_read,fake_running,fake_get_sleep_time,fake_send_response):
     #arrange
-    global count 
-    count = 0
+    reset_count()
     fake_running.side_effect=fake_runner
     fake_get_sleep_time.return_value = 0        
     fake_message = [{'text' : 'hello bob smith' , 'channel' : 'foo', 'user' : 'bar'}]
@@ -172,8 +168,7 @@ def test_command_routes_with_different_params_work(fake_env_get,fake_api_call,fa
 @patch('os.environ.get')
 def test_command_routes_with_different_params_paramless_command_works(fake_env_get,fake_api_call,fake_rtm_connect,fake_rtm_read,fake_running,fake_get_sleep_time,fake_send_response):
     #arrange
-    global count 
-    count = 0
+    reset_count()
     fake_running.side_effect=fake_runner
     fake_get_sleep_time.return_value = 0        
     fake_message = [{'text' : 'hello' , 'channel' : 'foo', 'user' : 'bar'}]
@@ -201,19 +196,6 @@ def test_command_routes_with_different_params_paramless_command_works(fake_env_g
 
     #assert
     fake_send_response.assert_called_with(True,"foo")   
-
-#side effects
-def api_call_side_effect(input):
-    if input == "users.list":
-        return {"members" : [{"id" : "1234", "profile" : {"display_name" : "fake_bot"}}]}
-    else:
-        return {"user_id" : "1234"}
-
-count = 0
-def fake_runner():
-    global count
-    count = count + 1
-    return count < 2
 
  
 
