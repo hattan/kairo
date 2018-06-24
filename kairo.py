@@ -1,11 +1,9 @@
 import os
-import glob
-import importlib
-import inspect
 import time
-from command import Command
-from slackclient import SlackClient
 from functools import wraps
+
+from slackclient import SlackClient
+
 
 class Kairo:
     name = None
