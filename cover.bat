@@ -1,0 +1,1 @@
+py.test --cov=kairo --cov-report term-missing --cov-report annotate:cov_annotate tests
