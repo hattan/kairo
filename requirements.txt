@@ -15,7 +15,7 @@ py==1.5.2
 pytest==3.3.2
 pytest-cov==2.5.1
 pytest-watch==4.1.0
-PyYAML==3.12
+PyYAML==5.4
 requests==2.18.4
 six==1.11.0
 slackclient==1.1.0
