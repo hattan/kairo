@@ -11,7 +11,7 @@ mock==2.0.0
 pathtools==0.1.2
 pbr==3.1.1
 pluggy==0.6.0
-py==1.5.2
+py==1.10.0
 pytest==3.3.2
 pytest-cov==2.5.1
 pytest-watch==4.1.0
